@@ -1,0 +1,13 @@
+<!doctype html>
+<head>
+    <title>{% block title %}{% endblock %} – {{ path }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+
+    </nav>
+    <section id="content">
+      {% block body %}{% endblock %}
+    </section>
+</body>

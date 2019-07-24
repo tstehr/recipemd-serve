@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    ""
+{% endblock %}
+
+{% block body %}
+    <ul>
+        {% if path != "" %}
+            <li><a href="../">Up</a></li>
+        {% endif %}
+        {% for path in child_paths %}
+            <li><a href="{{ path }}">{{ path }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
