@@ -1,14 +1,10 @@
-{% extends "base.html" %}
+{% extends "content.html" %}
 
 {% block title %}
     Error
 {% endblock %}
 
 {% block body %}
-    <nav>
-        <a href="../">Back</a>
-    </nav>
-
     {% if errors %}
         <ul>
         {% for error in errors %}

@@ -4,13 +4,21 @@
     ""
 {% endblock %}
 
+{% block nav %}
+    {% if path != "" %}
+        <a href="../">Up</a>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
-    <ul>
-        {% if path != "" %}
-            <li><a href="../">Up</a></li>
-        {% endif %}
-        {% for path in child_paths %}
-            <li><a href="{{ path }}">{{ path }}</a></li>
+    <ul id="folder">
+        {% for child_path in child_paths %}
+            <li>
+                <a href="{{ child_path }}">
+                    <header>{{ child_path }}</header>
+                    <aside>{{ child_path|get_recipe_title(path) }}</aside>
+                </a>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

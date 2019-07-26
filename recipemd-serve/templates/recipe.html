@@ -1,19 +1,19 @@
-{% extends "base.html" %}
+{% extends "content.html" %}
 
 {% block title %}
     {{ recipe.title }}
 {% endblock %}
 
-{% block body %}
-    <nav xmlns="http://www.w3.org/1999/html">
-        <a href="../">Back</a>
-    </nav>
-
+{% block nav %}
+    {{ super() }}
     <form method="GET" action="">
         <label>Yield: </label><input type="text" id="yield" name="yield" list="yield_completions" value="{{ request.args.get('yield', '1') }}"></label>
         <button type="submit">Scale</button>
     </form>
     <datalist id="yield_completions"></datalist>
+{% endblock %}
+
+{% block body %}
 
     {% if errors %}
         <ul>
