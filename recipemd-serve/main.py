@@ -1,5 +1,6 @@
 import os
 from decimal import Decimal
+from pprint import pprint
 
 import commonmark
 from flask import Flask, send_from_directory, request, render_template, redirect
@@ -26,7 +27,18 @@ def serve(base_folder_path) -> Flask:
         javascript=True,
         frames=True,
         remove_unknown_tags=True,
+        page_structure=True,
+        remove_tags=['body']
     )
+
+    @app.context_processor
+    def pjax_processor():
+        def get_root_template():
+            if "X-PJAX" in request.headers:
+                return "pjax.html"
+            return "structure.html"
+
+        return dict(get_root_template=get_root_template)
 
     @app.template_filter()
     def markdown_to_cleaned_html(markdown):
@@ -94,7 +106,6 @@ def serve(base_folder_path) -> Flask:
 
             return render_template("recipe.html", recipe_markdown=recipe_markdown, recipe=recipe, path=relative_path,
                                    units=units, errors=errors)
-
 
     return app
 

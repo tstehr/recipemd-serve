@@ -1,17 +1,3 @@
-<!doctype html>
-<head>
-    <meta charset="UTF-8" />
-    <title>{% block title %}{% endblock %} – {{ path }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div id="container">
-        <nav>
-          {% block nav %}{% endblock %}
-        </nav>
-        <section id="content">
-          {% block body %}{% endblock %}
-        </section>
-    </div>
-</body>
+{% extends get_root_template() %}
+
+{% block title %}{% block page_title %}{% endblock %} – {{ path }}{% endblock %}

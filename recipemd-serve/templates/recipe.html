@@ -1,19 +1,26 @@
 {% extends "content.html" %}
 
-{% block title %}
+{% block page_title %}
     {{ recipe.title }}
 {% endblock %}
 
 {% block nav %}
     {{ super() }}
     <form method="GET" action="">
-        <label>Yield: </label><input type="text" id="yield" name="yield" list="yield_completions" value="{{ request.args.get('yield', '1') }}"></label>
+        <label>
+            Yield:
+            <input type="text" id="yield" name="yield" list="yield_completions" value="{{ request.args.get('yield', '1') }}">
+        </label>
         <button type="submit">Scale</button>
     </form>
     <datalist id="yield_completions"></datalist>
+    <script>
+        const units = {{ units|tojson }}
+    </script>
 {% endblock %}
 
-{% block body %}
+
+{% block content %}
 
     {% if errors %}
         <ul>
@@ -25,32 +32,5 @@
 
     {{ recipe_markdown|markdown_to_cleaned_html }}
 
-    <script>
-        const yieldInput = document.getElementById("yield")
-        const yieldCompletions = document.getElementById("yield_completions")
-        const units = {{ units|tojson }}
-
-        function updateCompletions(value) {
-            const valueParts = value.split(" ")
-            const lastPart = valueParts[valueParts.length - 1]
-
-            const prefixUnit = units.find(unit => unit.toLowerCase().indexOf(lastPart.toLowerCase()) == 0)
-
-            const completionBaseParts = prefixUnit ? valueParts.slice(0, valueParts.length - 1) : valueParts
-            const completions = [[...completionBaseParts].join(" ")]
-            for (const unit of units) {
-                completions.push([...completionBaseParts, unit].join(" "))
-            }
-
-            yieldCompletions.innerHTML = completions.map(compl => `<option value="${compl}">`).join()
-
-        }
-
-        yieldInput.addEventListener("keyup", (e) => {
-           updateCompletions(e.target.value)
-        })
-
-        updateCompletions("1")
-    </script>
 {% endblock %}
 
