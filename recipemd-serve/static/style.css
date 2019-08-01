@@ -1,3 +1,10 @@
+:root {
+    --border-color: hsl(199, 92%, 85%);
+    --base-spacing: 1rem;
+    --stack-spacing: .5rem;
+
+}
+
 * {
     box-sizing: border-box;
 }
@@ -8,7 +15,6 @@ a {
 }
 
 body {
-    --base-spacing: 1rem;
 
     background: white;
     font-family: sans-serif;
@@ -17,12 +23,6 @@ body {
 }
 
 
-nav {
-    display: flex;
-    border-bottom: 2px solid hsl(199, 92%, 85%);
-    padding: .5rem var(--base-spacing);
-}
-
 
 #content {
     padding: var(--base-spacing);
@@ -30,19 +30,16 @@ nav {
 #content * {
     max-width: 100%;
 }
-#content > * {
+#content * {
     margin-top: 0;
     margin-bottom: 0;
 }
-#content > * + * {
-    margin-top: var(--base-spacing) !important;
+#content * + * {
+    margin-top: var(--stack-spacing) !important;
 }
 #content hr {
     border: 0;
-    border-top: 2px solid hsl(199, 92%, 85%);
-    margin: 0 calc(-1 * var(--base-spacing));
-    padding: 0 var(--base-spacing);
-    box-sizing: content-box;
+    border-top: 2px solid var(--border-color);
 }
 #folder {
     padding: 0;
@@ -62,7 +59,24 @@ nav {
 #folder aside {
     color: hsl(0, 0%, 50%);
 }
-@media (min-width: 40rem) {
+
+
+@media screen {
+    nav {
+        display: flex;
+        border-bottom: 2px solid var(--border-color);
+        padding: .5rem var(--base-spacing);
+    }
+    hr {
+        margin: 0 calc(-1 * var(--base-spacing));
+        padding: 0 var(--base-spacing);
+        box-sizing: content-box;
+    }
+}
+@media screen and (min-width: 40rem) {
+    :root {
+        --stack-spacing: 1rem;
+    }
     #folder li a {
         display: flex;
     }
@@ -78,9 +92,11 @@ nav {
         padding-right: .1rem;
     }
 }
-@media (min-width: 50rem) {
-    body {
+@media screen and (min-width: 50rem) {
+    root {
         --base-spacing: 1.5rem;
+    }
+    body {
         margin: .5rem;
         background: hsl(0, 0%, 95%);
     }
@@ -88,7 +104,44 @@ nav {
         margin: 0 auto;
         max-width: 60rem;
         background: white;
-        border: 2px solid hsl(199, 92%, 85%);
+        border: 2px solid var(--border-color);
         border-radius: 1rem;
     }
 }
+
+@media print {
+    :root {
+        --base-spacing: .5rem;
+        --stack-spacing: .5rem;
+    }
+    body {
+        background: white;
+        font-family: serif;
+    }
+    h1, h2, h3 {
+        font-family: Georgia, serif;
+    }
+    nav {
+        display: none;
+    }
+    #content {
+        column-width: 18rem;
+        column-gap: 2rem;
+        padding: 2rem;
+    }
+    #content hr {
+        margin-top: 1rem !important;
+        border: 0;
+    }
+    #content > h1 {
+        column-span: all;
+        margin-bottom: 1rem !important;
+    }
+    #content > h1 + * {
+        margin-top: 0 !important;
+    }
+    #folder li {
+        break-inside: avoid;
+    }
+}
+
