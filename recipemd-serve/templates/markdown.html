@@ -13,6 +13,8 @@
         </ul>
     {% endif %}
 
-    {{ markdown|markdown_to_cleaned_html }}
+    <div class="markdown">
+        {{ markdown|markdown_to_cleaned_html }}
+    </div>
 {% endblock %}
 

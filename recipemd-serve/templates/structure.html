@@ -10,9 +10,9 @@
         <nav id="nav">
           {% block nav %}{% endblock %}
         </nav>
-        <section id="content">
+        <div id="content">
           {% block content %}{% endblock %}
-        </section>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>

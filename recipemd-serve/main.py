@@ -101,11 +101,16 @@ def serve(base_folder_path) -> Flask:
                 errors.append(f'The recipe does not specify a yield in the unit "{required_yield.unit}". '
                               f'The following units can be used: ' + ", ".join(f'"{y.unit}"' for y in recipe.yields))
 
-            recipe_markdown = recipe_serializer.serialize(recipe)
-            units = list(set(y.unit for y in recipe.yields))
-
-            return render_template("recipe.html", recipe_markdown=recipe_markdown, recipe=recipe, path=relative_path,
-                                   units=units, errors=errors)
+            return render_template(
+                "recipe.html",
+                recipe=recipe,
+                yields=recipe_serializer._serialize_yields(recipe.yields),
+                tags=recipe_serializer._serialize_tags(recipe.tags),
+                ingredients=recipe_serializer._serialize_ingredients(recipe),
+                units=list(set(y.unit for y in recipe.yields)),
+                path=relative_path,
+                errors=errors
+            )
 
     return app
 

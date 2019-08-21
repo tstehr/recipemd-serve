@@ -30,7 +30,38 @@
         </ul>
     {% endif %}
 
-    {{ recipe_markdown|markdown_to_cleaned_html }}
+    <div class="recipe">
+        <h1 class="recipe__title">{{ recipe.title|markdown_to_cleaned_html }}</h1>
+
+        {% if recipe.description %}
+            <section class="recipe__description">
+                {{ recipe.description|markdown_to_cleaned_html }}
+            </section>
+        {% endif %}
+
+        {% if recipe.tags %}
+            <section class="recipe__tags">
+                {{ tags|markdown_to_cleaned_html }}
+            </section>
+        {% endif %}
+
+        {% if recipe.yields %}
+            <section class="recipe__yields">
+                {{ yields|markdown_to_cleaned_html }}
+            </section>
+        {% endif %}
+
+        <section class="recipe__ingredients">
+            {{ ingredients|markdown_to_cleaned_html }}
+        </section>
+
+        {% if recipe.instructions %}
+            <section class="recipe__instructions">
+                {{ recipe.instructions|markdown_to_cleaned_html }}
+            </section>
+        {% endif %}
+    </div>
+
 
 {% endblock %}
 

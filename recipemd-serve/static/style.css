@@ -22,41 +22,75 @@ body {
     margin: 0;
 }
 
+hr {
+    border: 0;
+    border-top: 2px solid var(--border-color);
+}
+h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
+}
+
 
 
 #content {
     padding: var(--base-spacing);
 }
-#content * {
+/* no specificity hack */
+*[id="content"] * {
     max-width: 100%;
-}
-#content * {
     margin-top: 0;
     margin-bottom: 0;
 }
-#content * + * {
+
+.recipe {
+
+}
+.recipe__title {
+    margin-bottom: var(--stack-spacing);
+}
+.recipe__description * + *,
+.recipe__instructions * + *,
+.recipe__ingredients > * + * {
+    margin-top: var(--stack-spacing);
+}
+.recipe__description > * > * * + *,
+.recipe__instructions > * > * * + * {
+    margin-top: 0;
+}
+.recipe__tags {
+    margin-top: var(--stack-spacing);
+    font-style: italic;
+}
+.recipe__yields {
+    margin-top: var(--stack-spacing);
+    font-weight: bold;
+}
+.recipe__ingredients {
+    column-width: 15rem;
+    column-gap: 2rem;
+}
+
+.markdown > * + *, .folder > * + *  {
     margin-top: var(--stack-spacing) !important;
 }
-#content hr {
-    border: 0;
-    border-top: 2px solid var(--border-color);
-}
-#folder {
+
+
+.folder {
     padding: 0;
     list-style: none;
 }
-#folder li a {
+.folder li a {
     text-decoration: none;
 }
-#folder > li + li {
+.folder > li + li {
     margin-top: .5rem;
 }
-#folder header, #folder aside {
+.folder header, .folder aside {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-#folder aside {
+.folder aside {
     color: hsl(0, 0%, 50%);
 }
 
@@ -72,20 +106,26 @@ body {
         padding: 0 var(--base-spacing);
         box-sizing: content-box;
     }
+    .recipe__ingredients, .recipe__instructions {
+        border-top: 2px solid var(--border-color);
+        margin: var(--stack-spacing) calc(-1 * var(--base-spacing)) 0;
+        padding: var(--stack-spacing) var(--base-spacing) 0;
+        box-sizing: content-box;
+    }
 }
 @media screen and (min-width: 40rem) {
     :root {
         --stack-spacing: 1rem;
     }
-    #folder li a {
+    .folder li a {
         display: flex;
     }
-    #folder li a header {
+    .folder li a header {
         flex-grow: 1;
         flex-shrink: 0;
         padding-right: var(--base-spacing);
     }
-    #folder li a aside {
+    .folder li a aside {
         flex-grow: 0;
         flex-shrink: 1;
         text-align: right;
@@ -124,6 +164,12 @@ body {
     nav {
         display: none;
     }
+    .recipe__ingredients, .recipe__instructions {
+        margin-top: var(--stack-spacing);
+    }
+    #content p + p {
+        text-indent: 1rem;
+    }
     #content {
         column-width: 18rem;
         column-gap: 2rem;
@@ -140,7 +186,7 @@ body {
     #content > h1 + * {
         margin-top: 0 !important;
     }
-    #folder li {
+    .folder li {
         break-inside: avoid;
     }
 }
