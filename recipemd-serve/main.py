@@ -1,6 +1,7 @@
 import os
 from decimal import Decimal
 from pprint import pprint
+from typing import List
 
 import commonmark
 from flask import Flask, send_from_directory, request, render_template, redirect
@@ -8,7 +9,7 @@ from lxml.html import document_fromstring, tostring
 from lxml.html.clean import Cleaner
 from markupsafe import Markup
 
-from recipemd.data import RecipeParser, RecipeSerializer, get_recipe_with_yield, Amount
+from recipemd.data import Ingredient, RecipeParser, RecipeSerializer, get_recipe_with_yield, Amount
 
 
 def serve(base_folder_path) -> Flask:
@@ -63,6 +64,10 @@ def serve(base_folder_path) -> Flask:
         except RuntimeError:
             return Markup('<strong>Invalid recipe!</strong>')
 
+    @app.template_filter()
+    def serialize_ingredients(ingredients: List[Ingredient]):
+        return ("\n".join(recipe_serializer._serialize_ingredient(i) for i in ingredients)).strip()
+
     @app.route('/')
     @app.route('/<path:relative_path>')
     def download_file(relative_path=''):
@@ -106,7 +111,6 @@ def serve(base_folder_path) -> Flask:
                 recipe=recipe,
                 yields=recipe_serializer._serialize_yields(recipe.yields),
                 tags=recipe_serializer._serialize_tags(recipe.tags),
-                ingredients=recipe_serializer._serialize_ingredients(recipe),
                 units=list(set(y.unit for y in recipe.yields)),
                 path=relative_path,
                 errors=errors

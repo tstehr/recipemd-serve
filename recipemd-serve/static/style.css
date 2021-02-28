@@ -22,15 +22,6 @@ body {
     margin: 0;
 }
 
-hr {
-    border: 0;
-    border-top: 2px solid var(--border-color);
-}
-h1, h2, h3, h4, h5, h6 {
-    break-after: avoid;
-}
-
-
 
 #content {
     padding: var(--base-spacing);
@@ -49,8 +40,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: var(--stack-spacing);
 }
 .recipe__description * + *,
-.recipe__instructions * + *,
-.recipe__ingredients > * + * {
+.recipe__instructions * + * {
     margin-top: var(--stack-spacing);
 }
 .recipe__description > * > * * + *,
@@ -65,9 +55,20 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: var(--stack-spacing);
     font-weight: bold;
 }
+
 .recipe__ingredients {
     column-width: 15rem;
     column-gap: 2rem;
+}
+.recipe__ingredients > * {
+    break-inside: avoid;
+}
+.recipe__ingredients > *, 
+.recipe__ingredients > * > :is(h1, h2, h3, h4, h5, h6) {
+    margin-bottom: var(--stack-spacing);
+}
+.recipe__ingredients > :last-child {
+    margin-bottom: 0;
 }
 
 .markdown > * + *, .folder > * + *  {
@@ -171,8 +172,6 @@ h1, h2, h3, h4, h5, h6 {
         text-indent: 1rem;
     }
     #content {
-        column-width: 18rem;
-        column-gap: 2rem;
         padding: 2rem;
     }
     #content hr {

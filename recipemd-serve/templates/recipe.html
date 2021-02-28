@@ -52,7 +52,8 @@
         {% endif %}
 
         <section class="recipe__ingredients">
-            {{ ingredients|markdown_to_cleaned_html }}
+            {{ serialize_ingredients(recipe.ingredients) }}
+            {{ serialize_ingredient_groups(recipe.ingredient_groups, 2) }}
         </section>
 
         {% if recipe.instructions %}
@@ -65,3 +66,18 @@
 
 {% endblock %}
 
+{% macro serialize_ingredients(ingredients) %}
+    {% if ingredients %}
+        {{ ingredients|serialize_ingredients|markdown_to_cleaned_html }}
+    {% endif %}
+{% endmacro %}
+
+{% macro serialize_ingredient_groups(ingredient_groups, level) %}
+    {% for ingredient_group in ingredient_groups %}
+        <div>
+            <h{{level}}>{{ingredient_group.title}}</h{{level}}>
+            {{ serialize_ingredients(ingredient_group.ingredients) }}
+        </div>
+        {{ serialize_ingredient_groups(ingredient_group.ingredient_groups, level+1) }}
+    {% endfor %}
+{% endmacro %}
