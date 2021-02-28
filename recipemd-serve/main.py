@@ -1,4 +1,5 @@
 import os
+import sys
 from decimal import Decimal
 from pprint import pprint
 from typing import List
@@ -122,7 +123,12 @@ def serve(base_folder_path) -> Flask:
 
 
 def main():
-    app = serve(os.getcwd())
+    if len(sys.argv) > 1:
+        path = os.path.join(os.getcwd(), sys.argv[1])
+    else: 
+        path = os.getcwd()
+    print(path)
+    app = serve(path)
     app.run(host="0.0.0.0", debug=True)
 
 
