@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block page_title %}
-    ""
-{% endblock %}
+{% block page_title %}{% if path == "" %}recipemd-serve{% endif %}{% endblock %}
 
 {% block nav %}
     {% if path != "" %}
