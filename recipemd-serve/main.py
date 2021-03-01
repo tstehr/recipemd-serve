@@ -16,6 +16,9 @@ from recipemd.data import Ingredient, RecipeParser, RecipeSerializer, get_recipe
 def serve(base_folder_path) -> Flask:
     app = Flask(__name__)
 
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
+
     recipe_parser = RecipeParser()
     recipe_serializer = RecipeSerializer()
 
