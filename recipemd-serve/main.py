@@ -115,9 +115,10 @@ def serve(base_folder_path) -> Flask:
             return render_template(
                 "recipe.html",
                 recipe=recipe,
-                yields=recipe_serializer._serialize_yields(recipe.yields),
+                yields=recipe_serializer._serialize_yields(recipe.yields, rounding=2),
                 tags=recipe_serializer._serialize_tags(recipe.tags),
                 units=list(set(y.unit for y in recipe.yields)),
+                default_yield=recipe_serializer._serialize_amount(recipe.yields[0]) if recipe.yields else "1",
                 path=relative_path,
                 errors=errors
             )

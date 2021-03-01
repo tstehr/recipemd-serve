@@ -9,7 +9,7 @@
     <form method="GET" action="">
         <label>
             Yield:
-            <input type="text" id="yield" name="yield" list="yield_completions" value="{{ request.args.get('yield', '1') }}">
+            <input type="text" id="yield" name="yield" list="yield_completions" value="{{ request.args.get('yield', default_yield) }}">
         </label>
         <button type="submit">Scale</button>
     </form>
