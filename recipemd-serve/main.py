@@ -109,6 +109,8 @@ def serve(base_folder_path) -> Flask:
             except StopIteration:
                 errors.append(f'The recipe does not specify a yield in the unit "{required_yield.unit}". '
                               f'The following units can be used: ' + ", ".join(f'"{y.unit}"' for y in recipe.yields))
+            except Exception as e:
+                errors.append(str(e))
 
             return render_template(
                 "recipe.html",
