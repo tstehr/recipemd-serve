@@ -70,7 +70,7 @@ def serve(base_folder_path) -> Flask:
 
     @app.template_filter()
     def serialize_ingredients(ingredients: List[Ingredient]):
-        return ("\n".join(recipe_serializer._serialize_ingredient(i) for i in ingredients)).strip()
+        return ("\n".join(recipe_serializer._serialize_ingredient(i, rounding=2) for i in ingredients)).strip()
 
     @app.route('/')
     @app.route('/<path:relative_path>')
