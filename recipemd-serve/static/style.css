@@ -1,5 +1,6 @@
 :root {
-    --border-color: hsl(199, 92%, 85%);
+    --border-color: rgb(182, 230, 252);    
+    --border-width: 2px;
     --base-spacing: 1rem;
     --stack-spacing: .5rem;
 
@@ -15,7 +16,6 @@ a {
 }
 
 body {
-
     background: white;
     font-family: sans-serif;
     line-height: 1.5em;
@@ -99,8 +99,12 @@ body {
 @media screen {
     nav {
         display: flex;
-        border-bottom: 2px solid var(--border-color);
+        border-bottom: var(--border-width) solid var(--border-color);
         padding: .5rem var(--base-spacing);
+        justify-content: space-between;
+    }
+    nav:empty {
+        display: none;
     }
     hr {
         margin: 0 calc(-1 * var(--base-spacing));
@@ -108,7 +112,7 @@ body {
         box-sizing: content-box;
     }
     .recipe__ingredients, .recipe__instructions {
-        border-top: 2px solid var(--border-color);
+        border-top: var(--border-width) solid var(--border-color);
         margin: var(--stack-spacing) calc(-1 * var(--base-spacing)) 0;
         padding: var(--stack-spacing) var(--base-spacing) 0;
         box-sizing: content-box;
@@ -134,19 +138,22 @@ body {
     }
 }
 @media screen and (min-width: 50rem) {
-    root {
+    :root {
         --base-spacing: 1.5rem;
+    }
+    html, body {
+        min-height: 100%;
     }
     body {
         margin: .5rem;
-        background: hsl(0, 0%, 95%);
+        background: conic-gradient(from 90deg at bottom right, cyan, rebeccapurple);
     }
     #container {
         margin: 0 auto;
         max-width: 60rem;
         background: white;
-        border: 2px solid var(--border-color);
-        border-radius: 1rem;
+        border: var(--border-width) solid var(--border-color);
+        box-shadow: 0 0 20px hsl(0deg 0% 100% / 50%);
     }
 }
 
