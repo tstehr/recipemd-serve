@@ -17,7 +17,7 @@ function updateCompletions(value) {
         completions.push([...completionBaseParts, unit].join(" "))
     }
 
-    yieldCompletions.innerHTML = completions.map(compl => `<option value="${compl}">`).join()
+    yieldCompletions.innerHTML = completions.map(compl => `<option value="${compl}" />`).join("")
 
 }
 
