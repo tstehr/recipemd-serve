@@ -5,7 +5,7 @@ from pprint import pprint
 from typing import List
 
 import commonmark
-from flask import Flask, send_from_directory, request, render_template, redirect
+from flask import Flask, send_from_directory, request, render_template, redirect, abort
 from lxml.html import document_fromstring, tostring
 from lxml.html.clean import Cleaner
 from markupsafe import Markup
@@ -72,24 +72,34 @@ def serve(base_folder_path) -> Flask:
     def serialize_ingredients(ingredients: List[Ingredient]):
         return ("\n".join(recipe_serializer._serialize_ingredient(i, rounding=2) for i in ingredients)).strip()
 
-    @app.route('/')
-    @app.route('/<path:relative_path>')
-    def download_file(relative_path=''):
-        absolute_path = os.path.join(base_folder_path, relative_path)
+    def forward_shortlink(shortlink: str):
+        shortlink = shortlink.lower()
+        all_files: List[str] = []
+        for root, dirs, files in os.walk(base_folder_path):
+            files = [f for f in files if not f[0] == '.']
+            dirs[:] = [d for d in dirs if not d[0] == '.']
+            rel_root = os.path.relpath(root, base_folder_path)
+            all_files.extend(os.path.join(rel_root, file) for file in files)
+            all_files.extend(os.path.join(rel_root, dir) for dir in dirs)
+        print(all_files)
+        files = [file for file in all_files if shortlink in file.lower()]
+        if not files:
+            abort(404)
+        files.sort(key=lambda f: len(f))
+        print(files)
+        return redirect(f'/{files[0]}', code=302)
 
-        if os.path.isdir(absolute_path):
-            if not absolute_path.endswith('/'):
-                return redirect(f'/{relative_path}/', code=302)
+    def render_folder(relative_path: str, absolute_path: str): 
+        if not absolute_path.endswith('/'):
+            return redirect(f'/{relative_path}/', code=302)
 
-            child_paths = [(ch, os.path.isdir(os.path.join(absolute_path, ch))) for ch in os.listdir(absolute_path)]
-            child_paths = [(ch, is_dir) for ch, is_dir in child_paths if not ch.startswith('.') and (is_dir or ch.endswith('.md'))]
-            child_paths = [f'{ch}/' if not ch.endswith('/') and is_dir else ch for ch, is_dir in child_paths]
-            child_paths = sorted(child_paths)
-            return render_template("folder.html", child_paths=child_paths, path=relative_path)
+        child_paths = [(ch, os.path.isdir(os.path.join(absolute_path, ch))) for ch in os.listdir(absolute_path)]
+        child_paths = [(ch, is_dir) for ch, is_dir in child_paths if not ch.startswith('.') and (is_dir or ch.endswith('.md'))]
+        child_paths = [f'{ch}/' if not ch.endswith('/') and is_dir else ch for ch, is_dir in child_paths]
+        child_paths = sorted(child_paths)
+        return render_template("folder.html", child_paths=child_paths, path=relative_path)
 
-        if not absolute_path.endswith('.md'):
-            return send_from_directory(base_folder_path, relative_path)
-
+    def render_recipe(relative_path: str, absolute_path: str): 
         with open(absolute_path, 'r', encoding='UTF-8') as f:
             required_yield_str = request.args.get('yield', '1')
             required_yield = recipe_parser.parse_amount(required_yield_str)
@@ -122,6 +132,22 @@ def serve(base_folder_path) -> Flask:
                 path=relative_path,
                 errors=errors
             )
+
+    @app.route('/')
+    @app.route('/<path:relative_path>')
+    def download_file(relative_path=''):
+        absolute_path = os.path.join(base_folder_path, relative_path)
+
+        if not os.path.exists(absolute_path): 
+            return forward_shortlink(relative_path)
+
+        if os.path.isdir(absolute_path):
+            return render_folder(relative_path, absolute_path)
+
+        if not absolute_path.endswith('.md'):
+            return send_from_directory(base_folder_path, relative_path)
+
+        return render_recipe(relative_path, absolute_path)
 
     return app
 
