@@ -10,12 +10,19 @@
 
 {% block content %}
     <ul class="folder">
-        {% for child_path in child_paths %}
+        {% for path in child_folders %}
             <li>
-                <a href="{{ child_path }}">
-                    <header>{{ child_path }}</header>
-                    <aside>{{ child_path|get_recipe_title(path) }}</aside>
-                </a>
+                <a href="{{ path }}">{{ path }}</a>
+            </li>
+        {% endfor %}
+        {% for (path, title) in child_recipes %}
+            <li>
+                <a href="{{ path }}">{{ title }}</a>
+            </li>
+        {% endfor %}
+        {% for path in child_files %}
+            <li>
+                <a href="{{ path }}">{{ path }}</a>
             </li>
         {% endfor %}
     </ul>

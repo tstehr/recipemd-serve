@@ -92,12 +92,30 @@ def serve(base_folder_path) -> Flask:
     def render_folder(relative_path: str, absolute_path: str): 
         if not absolute_path.endswith('/'):
             return redirect(f'/{relative_path}/', code=302)
+        
+        children = [ch for ch in os.listdir(absolute_path) if not ch.startswith('.')]
+        # children = sorted(children, key=lambda ch: ch.casefold())
 
-        child_paths = [(ch, os.path.isdir(os.path.join(absolute_path, ch))) for ch in os.listdir(absolute_path)]
-        child_paths = [(ch, is_dir) for ch, is_dir in child_paths if not ch.startswith('.') and (is_dir or ch.endswith('.md'))]
-        child_paths = [f'{ch}/' if not ch.endswith('/') and is_dir else ch for ch, is_dir in child_paths]
-        child_paths = sorted(child_paths)
-        return render_template("folder.html", child_paths=child_paths, path=relative_path)
+        child_folders, child_recipes, child_files = [], [], []
+        for ch in children:
+            absolute_child_path = os.path.join(absolute_path, ch)
+            if os.path.isdir(absolute_child_path):
+                ch = ch if ch.endswith('/') else f'{ch}/'
+                child_folders.append(ch)
+            else:
+                try:
+                    with open(absolute_child_path, 'r', encoding='UTF-8') as f:
+                        recipe = recipe_parser.parse(f.read())
+                    # TODO markdown to html
+                    child_recipes.append((ch, recipe.title))
+                except:
+                    child_files.append(ch)
+
+        child_folders = sorted(child_folders, key=lambda ch: ch.casefold())        
+        child_recipes = sorted(child_recipes, key=lambda ch: ch[1].casefold())
+
+
+        return render_template("folder.html", child_folders=child_folders, child_recipes=child_recipes, child_files=child_files, path=relative_path)
 
     def render_recipe(relative_path: str, absolute_path: str): 
         with open(absolute_path, 'r', encoding='UTF-8') as f:

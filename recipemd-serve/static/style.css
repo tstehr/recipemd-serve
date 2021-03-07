@@ -3,7 +3,7 @@
     --border-width: 2px;
     --base-spacing: 1rem;
     --stack-spacing: .5rem;
-
+    hyphens: auto;
 }
 
 * {
@@ -84,20 +84,15 @@ body {
     list-style: none;
 }
 .folder li a {
+    display: block;
     text-decoration: none;
-}
-.folder > li + li {
-    margin-top: .5rem;
-}
-.folder header, .folder aside {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.folder aside {
-    color: hsl(0, 0%, 50%);
+.folder li + li a {
+    margin-top: .5rem;
 }
-
 
 @media screen {
     nav {
@@ -124,20 +119,6 @@ body {
 @media screen and (min-width: 40rem) {
     :root {
         --stack-spacing: 1rem;
-    }
-    .folder li a {
-        display: flex;
-    }
-    .folder li a header {
-        flex-grow: 1;
-        flex-shrink: 0;
-        padding-right: var(--base-spacing);
-    }
-    .folder li a aside {
-        flex-grow: 0;
-        flex-shrink: 1;
-        text-align: right;
-        padding-right: .1rem;
     }
 }
 @media screen and (min-width: 50rem) {
